@@ -11,13 +11,15 @@
 #include <math.h>
 
 int random_number(int min_num, int max_num);
-
+void sighandler(int sig);
 int main(int argc, char** argv){
 	pid_t P1;
 	int P2, P3, P4;
 	int to_srv;
 	int i;
 	char pid[100];
+	char to_Client[100];
+	signal(SIGCONT, sighandler);
 	if(argc != 5){
 		printf("<Usage> ./ex2_client.out P1 P2 P3 P4\n");
 		exit(1);
@@ -40,7 +42,12 @@ int main(int argc, char** argv){
 	printf("%d\n", P1);
 	printf("%d\n", getpid());
 	kill(P1,SIGCONT);
+	pause();
+	sprintf(to_Client, "to_client_%d", getpid());
+	memset(to_Client, 0, sizeof(to_Client));
 }
+
+
 
 
 int random_number(int min_num, int max_num)
@@ -59,4 +66,8 @@ int random_number(int min_num, int max_num)
     srand(time(NULL));
     result = (rand() % (hi_num - low_num)) + low_num;
     return result;
+}
+
+void sighandler(int sig){
+	return;
 }
