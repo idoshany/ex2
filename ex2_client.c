@@ -13,13 +13,13 @@
 int random_number(int min_num, int max_num);
 void sighandler(int sig);
 int main(int argc, char** argv){
-	pid_t P1=0;
-	int P2 = 0, P3 = 0, P4 = 0;
-	int to_srv, to_client;
-	int i;
-	char pid[100]= "";
-	char to_Client[100] = "";
-	char print[100]= "";
+	pid_t P1=0; //its the Process Id of the server
+	int P2 = 0, P3 = 0, P4 = 0; // The argv values
+	int to_srv, to_client; // to_srv.txt fd, to_client.txt fd
+	int i; //loop index
+	char pid[100]= ""; //Buffer to keep the value of to_srv.txt pre writing to the file
+	char to_Client[100] = "";//buffer to keep the name of the to_client file name
+	char print[100]= "";//buffer to keep the value of the to_client file, then printing it
 	signal(SIGCONT, sighandler);
 	if(argc != 5){
 		printf("<Usage> ./ex2_client.out P1 P2 P3 P4\n");
@@ -55,7 +55,7 @@ int main(int argc, char** argv){
 
 
 
-
+//Function to randomize a number between 1 and 5
 int random_number(int min_num, int max_num)
 {
     int result = 0, low_num = 0, hi_num = 0;
@@ -74,6 +74,8 @@ int random_number(int min_num, int max_num)
     return result;
 }
 
+//Function for catching the SIGCONT signal
 void sighandler(int sig){
+	printf("Continuing the process\n");
 	return;
 }

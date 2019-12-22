@@ -16,18 +16,17 @@ int stringtoint(char* PB);
 int Calc(int P2, int P3, int P4);
 
 int main(){
-	pid_t cPid;
-	int P1,P2, P3, P4;
+	pid_t cPid = 0;
+	int P1 = 0,P2 = 0, P3 = 0, P4 = 0;
 	char PB2[100] = "", PB3[100]="", PB4[100]= "";
 	int to_srv, to_clientfd;
-	char cBuf[100];
+	char cBuf[100]= "";
 	char to_client[100]= "to_client_";
 	char PB1[100] = "";
 	int i=0;
-	char sBuf[100];
-	int j;
-	int calc;
-	int z;
+	char sBuf[100] = "";
+	int j = 0;
+	int calc = 0;
 	signal(SIGCONT, sighandler);
 	while(1){
 		remove("to_srv.txt");
@@ -81,11 +80,16 @@ int main(){
 			kill(P1,SIGCONT);//sending a signal to the client
 			exit(0);
 		}
+		if(cPid < 0){
+			printf("%s\n", strerror(errno));
+			exit(1);
+		}
 		printf("%d\n", cPid);
 	}
 	return 0;
 }
 
+//function make a string integer int type
 int stringtoint(char* PB){
 	int P=0;
 	int i;
@@ -94,6 +98,8 @@ int stringtoint(char* PB){
 	return P;
 }
 
+
+//Function to Calculate the value
 int Calc(int P2, int P3, int P4){
 	int sw;
 	switch(P3){
@@ -116,5 +122,6 @@ int Calc(int P2, int P3, int P4){
 
 
 void sighandler(int sig){
+	printf("Continuing the Process\n");
 	return;
 }
