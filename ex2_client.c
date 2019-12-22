@@ -13,12 +13,13 @@
 int random_number(int min_num, int max_num);
 void sighandler(int sig);
 int main(int argc, char** argv){
-	pid_t P1;
-	int P2, P3, P4;
-	int to_srv;
+	pid_t P1=0;
+	int P2 = 0, P3 = 0, P4 = 0;
+	int to_srv, to_client;
 	int i;
-	char pid[100];
-	char to_Client[100];
+	char pid[100]= "";
+	char to_Client[100] = "";
+	char print[100]= "";
 	signal(SIGCONT, sighandler);
 	if(argc != 5){
 		printf("<Usage> ./ex2_client.out P1 P2 P3 P4\n");
@@ -44,7 +45,12 @@ int main(int argc, char** argv){
 	kill(P1,SIGCONT);
 	pause();
 	sprintf(to_Client, "to_client_%d", getpid());
-	memset(to_Client, 0, sizeof(to_Client));
+	fflush(stdout);
+	printf("%s\n", to_Client);
+	to_client = open(to_Client, O_RDONLY);
+	printf("%d\n", to_client);
+      	read(to_client, print, 100);
+	printf("%s", print);
 }
 
 
