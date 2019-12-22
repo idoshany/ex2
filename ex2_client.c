@@ -1,3 +1,9 @@
+/**
+ Ido Shany - 207689746
+ Omer Lindner - 313532574
+**/
+
+
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -25,6 +31,11 @@ int main(int argc, char** argv){
 		printf("<Usage> ./ex2_client.out P1 P2 P3 P4\n");
 		exit(1);
 	}
+	printf("%s %s %d %d\n",argv[3], argv[4], strcmp(argv[4],"0"), strcmp(argv[3],"4"));
+	if((strcmp(argv[4],"0") == 0) && (strcmp(argv[3],"4") == 0)){
+		fprintf(stderr,"Can't Divide with 0\n");
+		exit(1);
+	}
 	sprintf(pid, "%d %s %s %s\n", getpid(), argv[2], argv[3], argv[4]);
 	for(i =0 ; i < 10; i++){
 		to_srv = open("to_srv.txt", O_RDWR | O_CREAT| O_EXCL, 0777);
@@ -40,17 +51,15 @@ int main(int argc, char** argv){
 	write(to_srv, pid, strlen(pid));
 	for(i=0; i < strlen(argv[1]); i++)
 		P1 += pow(10,strlen(argv[1])-i-1) *(argv[1][i]-'0');
-	printf("%d\n", P1);
-	printf("%d\n", getpid());
 	kill(P1,SIGCONT);
 	pause();
 	sprintf(to_Client, "to_client_%d", getpid());
 	fflush(stdout);
-	printf("%s\n", to_Client);
 	to_client = open(to_Client, O_RDONLY);
-	printf("%d\n", to_client);
       	read(to_client, print, 100);
-	printf("%s", print);
+	printf("The Result - %s", print);
+	close(to_srv);
+	close(to_client);
 }
 
 

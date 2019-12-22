@@ -1,3 +1,8 @@
+/**
+Ido Shany - 20768746
+Omer Lindner - 313532574 
+**/
+
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -28,9 +33,9 @@ int main(){
 	int j = 0;
 	int calc = 0;
 	signal(SIGCONT, sighandler);
+	remove("to_srv.txt");
+	printf("Server ID - %d\n",getpid());
 	while(1){
-		remove("to_srv.txt");
-		printf("%d\n",getpid());
 		pause();
 		//opening the Child process, which will handle the client
 		if((cPid = fork()) == 0){
@@ -41,10 +46,7 @@ int main(){
 				PB1[i] = cBuf[i];
 				i++;
 			}
-			printf("hey\n");
 			P1 = stringtoint(PB1); //passing the value of the client pid into P1(int)
-			printf("%d\n", P1);
-			printf("%s\n", to_client);
 			i++; // The index to the cBuf which contains t_srv string value is passed over the space
 			j = i;//index for the buffer for P2
 			//Passing the P2 argument to P2
@@ -70,13 +72,14 @@ int main(){
                		}
 			P4 = stringtoint(PB4);
 			printf("%d %d %d\n", P2, P3, P4); // Checking that the passing went well
-			printf("%d\n" , Calc(P2, P3, P4));//The function that calculates the value of the operation
 			calc  = Calc(P2, P3, P4);
 			sprintf(sBuf, "%d\n", calc);
 			to_clientfd = open(to_client, O_WRONLY | O_CREAT, 0777);//Creating the to_client text file
 			write(to_clientfd, sBuf, strlen(sBuf));// Writing the calulation value into to_client
 			remove("to_srv.txt");
 			i = 0;// reseting the cBuf index
+			close(to_srv);
+			close(to_clientfd);
 			kill(P1,SIGCONT);//sending a signal to the client
 			exit(0);
 		}
@@ -84,7 +87,8 @@ int main(){
 			printf("%s\n", strerror(errno));
 			exit(1);
 		}
-		printf("%d\n", cPid);
+		printf("Server ID - %d\n",getpid());
+		printf("Child Process Id - %d\n", cPid);
 	}
 	return 0;
 }
